@@ -63,26 +63,27 @@ const ForgotPassword = () => {
 
   return (
     <>
+    <main className="h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500">
       {/* Top bar with language + back to login */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-3 w-full px-3 py-3">
         <div>
           <select
-            className="border rounded p-1.5 text-gray-600 text-sm sm:text-base"
+            className="border rounded p-1.5 text-white text-sm sm:text-base"
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
           >
-            <option value="en">English</option>
-            <option value="fr">Français</option>
-            <option value="es">Español</option>
-            <option value="de">Deutsch</option>
-            <option value="ar">العربية</option>
+            <option value="en" className="text-gray-500">English</option>
+            <option value="fr" className="text-gray-500">Français</option>
+            <option value="es" className="text-gray-500">Español</option>
+            <option value="de" className="text-gray-500">Deutsch</option>
+            <option value="ar" className="text-gray-500">العربية</option>
           </select>
         </div>
 
         <div className="flex items-center gap-1.5 text-sm sm:text-base">
           <Link
             to="/login"
-            className="text-blue-500 hover:underline font-medium"
+            className="text-white hover:underline font-medium"
           >
             {translations[language].backLogin}
           </Link>
@@ -90,13 +91,13 @@ const ForgotPassword = () => {
       </div>
 
       {/* Main Section */}
-      <section className="flex justify-center items-center min-h-[80vh] px-3 sm:px-6 md:px-10">
-        <div className="border py-6 px-4 sm:px-6 md:px-8 w-full max-w-[350px] sm:max-w-[400px] md:max-w-[500px] rounded-2xl flex flex-col justify-center shadow-md bg-white">
+      <section className="flex  justify-center items-center min-h-[80vh] px-3 sm:px-6 md:px-10">
+        <div className=" bg-white/10 backdrop-blur-xl py-6 px-4 sm:px-6 md:px-8 w-full max-w-[350px] sm:max-w-[400px] md:max-w-[500px] rounded-2xl flex flex-col justify-center shadow-md   ">
           <div className="w-full flex flex-col">
-            <h2 className="text-center font-semibold font-sans text-[1.5rem] sm:text-[1.75rem] md:text-[2rem] pb-2">
+            <h2 className="text-white text-center font-semibold font-sans text-[1.5rem] sm:text-[1.75rem] md:text-[2rem] pb-2">
               {translations[language].title}
             </h2>
-            <p className="text-center text-gray-500 text-sm sm:text-base mb-4">
+            <p className="text-center text-white text-sm sm:text-base mb-4">
               {translations[language].instruction}
             </p>
 
@@ -116,26 +117,27 @@ const ForgotPassword = () => {
               onSubmit={handleReset}
               className="w-full flex flex-col items-center"
             >
-              <div className="flex flex-col text-gray-600 gap-2 mb-3 w-full sm:w-[90%]">
+              <div className="flex flex-col text-white gap-2 mb-3 w-full sm:w-[90%]">
                 <label className="text-sm sm:text-base">
                   {translations[language].email}
                 </label>
                 <input
                   type="email"
                   placeholder={translations[language].email}
-                  className="border p-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="border bg-white/10 p-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
 
-              <button className="w-full sm:w-[90%] bg-blue-500 hover:bg-blue-600 text-white p-2.5 mt-5 rounded-3xl font-semibold text-sm sm:text-base transition-all">
+              <button className="w-full sm:w-[90%] bg-gradient-to-r from-indigo-500 to-pink-500 text-white p-2.5 mt-5 rounded-3xl font-semibold text-sm sm:text-base transition-all">
                 {translations[language].reset}
               </button>
             </form>
           </div>
         </div>
       </section>
+      </main>
     </>
   );
 };

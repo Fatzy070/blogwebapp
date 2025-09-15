@@ -105,17 +105,33 @@ const Login = () => {
         }
       }
 
-      const userCred = await signInWithEmailAndPassword(
-        auth,
-        loginEmail,
-        password
-      );
+      const userCred = await signInWithEmailAndPassword(auth, loginEmail, password );
+
+      const currentUser = userCred.user
+      const userDoc = await getDoc(doc(db , "users" , currentUser.uid))
+      if(userDoc.exists()){
+        const userData = userDoc.data()
+
+        localStorage.setItem("user" , JSON.stringify(userData))
+      }
       alert("Login successful!");
       console.log("Logged in:", userCred.user);
-      navigate("/");
+      navigate("/profile");
+
+
+
     } catch (err) {
-      setError(err.message);
-    } finally {
+    switch (err.code) {
+      case "auth/wrong-password":
+        setError("Incorrect password");
+        break;
+      case "auth/user-not-found":
+        setError("No user found with this email");
+        break;
+      default:
+        setError("Login failed. Try again.");
+    }
+   } finally {
       setLoading(false)
     };
   }
@@ -139,7 +155,7 @@ const Login = () => {
       }
       alert("Login successful!");
       console.log("Google login success:", user);
-      navigate("/");
+      navigate("/profile");
     } catch (err) {
       console.error("Google login error:", err.message);
       setError(err.message);
@@ -154,24 +170,25 @@ const Login = () => {
   return (
     
     <>
+    <main className="h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500">
     
       {/* Top Bar with language + signup link */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 w-full px-3 py-3">
+      <div className="flex  flex-col sm:flex-row items-center justify-between gap-3 w-full px-3 py-3">
         <div>
           <select
-            className="border rounded p-1.5 text-gray-600 text-sm sm:text-base"
+            className="border rounded p-1.5 text-white text-sm sm:text-base"
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
           >
-            <option value="en">English</option>
-            <option value="fr">Français</option>
-            <option value="es">Español</option>
-            <option value="de">Deutsch</option>
-            <option value="ar">العربية</option>
+            <option value="en" className="text-gray-500">English</option>
+            <option value="fr" className="text-gray-500">Français</option>
+            <option value="es" className="text-gray-500">Español</option>
+            <option value="de" className="text-gray-500">Deutsch</option>
+            <option value="ar" className="text-gray-500">العربية</option>
           </select>
         </div>
 
-        <div className="flex items-center gap-1.5 text-sm sm:text-base">
+        <div className="flex text-white items-center gap-1.5 text-sm sm:text-base">
           <p>{translations[language].dontHave}</p>
           <Link
             to="/signup"
@@ -183,10 +200,10 @@ const Login = () => {
       </div>
 
       {/* Main Section */}
-      <section className="flex justify-center items-center min-h-[80vh] px-3 sm:px-6 md:px-10">
-        <div className="border py-6 px-4 sm:px-6 md:px-8 w-full max-w-[350px] sm:max-w-[400px] md:max-w-[500px] rounded-2xl flex flex-col justify-center shadow-md bg-white">
+      <section className="flex  justify-center items-center min-h-[80vh] px-3 sm:px-6 md:px-10">
+        <div className="bg-white/10 backdrop-blur-xl  py-6 px-4 sm:px-6 md:px-8 w-full max-w-[350px] sm:max-w-[400px] md:max-w-[500px] rounded-2xl flex flex-col justify-center shadow-2xl">
           <div className="w-full flex flex-col">
-            <h2 className="text-center font-semibold font-sans text-[1.5rem] sm:text-[1.75rem] md:text-[2rem] pb-3">
+            <h2 className="text-white text-center font-semibold font-sans text-[1.5rem] sm:text-[1.75rem] md:text-[2rem] pb-3">
               {translations[language].login}
             </h2>
             {error && (
@@ -200,33 +217,33 @@ const Login = () => {
               onSubmit={handleLogin}
               className="w-full flex flex-col items-center"
             >
-              <div className="flex flex-col text-gray-600 gap-2 mb-3 w-full sm:w-[90%]">
+              <div className="block text-white mb-3 w-full sm:w-[90%]">
                 <label className="text-sm sm:text-base">
                   {translations[language].email}
                 </label>
                 <input
                   type="text"
                   placeholder={translations[language].email}
-                  className="border p-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="border mt-3 bg-white/20 p-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
                 />
               </div>
 
-              <div className="flex flex-col text-gray-600 gap-2 mb-3 w-full sm:w-[90%]">
+              <div className="block text-white mb-3 w-full sm:w-[90%]">
                 <label className="text-sm sm:text-base">
                   {translations[language].password}
                 </label>
                 <input
                   type="password"
                   placeholder={translations[language].password}
-                  className="border p-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+                   className="border mt-3 bg-white/20 p-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
 
-              <button className="w-full sm:w-[90%] bg-blue-500 hover:bg-blue-600 text-white p-2.5 mt-5 rounded-3xl font-semibold text-sm sm:text-base transition-all">
+              <button className="w-full sm:w-[90%] bg-gradient-to-r from-indigo-500 to-pink-500 text-white p-2.5 mt-5 rounded-3xl font-semibold text-sm sm:text-base transition-all">
                 {translations[language].login}
               </button>
             </form>
@@ -235,7 +252,7 @@ const Login = () => {
             <div className="text-center mt-3">
               <Link
                 to="/forgot-password"
-                className="text-blue-500 hover:underline text-sm sm:text-base"
+                className="text-white hover:underline text-sm sm:text-base"
               >
                 {translations[language].forgot}
               </Link>
@@ -243,7 +260,7 @@ const Login = () => {
 
             {/* OR Divider */}
             <div className="w-full flex flex-col items-center">
-              <div className="flex justify-center uppercase text-gray-400 items-center gap-3 mt-5 w-[90%]">
+              <div className="flex justify-center uppercase text-white items-center gap-3 mt-5 w-[90%]">
                 <span className="border flex-1 h-0"></span>
                 <p className="text-sm sm:text-base">
                   {translations[language].or}
@@ -254,7 +271,7 @@ const Login = () => {
               {/* Google Login */}
               <button
                 onClick={handleGoogleLogin}
-                className="flex items-center gap-3 border-2 w-full sm:w-[90%] p-2.5 mt-5 rounded-3xl justify-center border-gray-400 hover:bg-gray-50 transition-all"
+                className="flex items-center gap-3 border-2 w-full sm:w-[90%] p-2.5 mt-5 rounded-3xl justify-center text-white transition-all"
               >
                 <FcGoogle className="text-lg sm:text-xl" />
                 <p className="text-sm sm:text-base font-medium">
@@ -265,6 +282,7 @@ const Login = () => {
           </div>
         </div>
       </section>
+      </main>
     </>
   );
 };

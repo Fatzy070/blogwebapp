@@ -130,7 +130,7 @@ const Signup = () => {
 
       alert("Signup successful!");
       console.log("Google signup success:", user);
-      navigate("/login");
+      navigate("/profile");
     } catch (err) {
       console.error("Google signup error:", err.message);
       setError(err.message);
@@ -144,20 +144,21 @@ const Signup = () => {
 }
   return (
     <>
+    <main className="back  bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500">
       {/* Header Row */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-2 w-full px-3 sm:px-6 py-3">
+      <div className="flex text-white flex-col sm:flex-row items-center justify-between gap-2 w-full px-3 sm:px-6 py-3">
         {/* Language selection */}
         <div className="w-full sm:w-auto flex justify-start sm:justify-center">
           <select
-            className="border rounded p-1.5 text-gray-600 w-full sm:w-auto"
+            className="border rounded p-1.5  w-full sm:w-auto"
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
           >
-            <option value="en">English</option>
-            <option value="fr">Français</option>
-            <option value="es">Español</option>
-            <option value="de">Deutsch</option>
-            <option value="ar">العربية</option>
+            <option value="en" className="text-gray-500">English</option>
+            <option value="fr" className="text-gray-500">Français</option>
+            <option value="es" className="text-gray-500">Español</option>
+            <option value="de" className="text-gray-500">Deutsch</option>
+            <option value="ar" className="text-gray-500">العربية</option>
           </select>
         </div>
 
@@ -171,10 +172,10 @@ const Signup = () => {
       </div>
 
       {/* Signup Section */}
-      <section className="flex justify-center items-center min-h-screen px-3 sm:px-6 md:px-10">
-        <div className="border py-6 px-4 sm:px-6 md:px-8 w-full max-w-[350px] sm:max-w-[400px] md:max-w-[500px] rounded-2xl flex flex-col justify-center shadow-md">
+      <section className="flex  justify-center items-center min-h-screen px-3 sm:px-6 md:px-10">
+        <div className=" bg-white/10 backdrop-blur-xl py-6 px-4 sm:px-6 md:px-8 w-full max-w-[350px] sm:max-w-[400px] md:max-w-[500px] rounded-2xl flex flex-col justify-center shadow-md">
           <div className="w-full flex flex-col">
-            <h2 className="text-center font-semibold font-sans acct text-[1.75rem] sm:text-[2rem] pb-3">
+            <h2 className="text-center text-white font-semibold font-sans acct text-[1.75rem] sm:text-[2rem] pb-3">
               {translations[language].create}
             </h2>
             {error && (
@@ -184,12 +185,12 @@ const Signup = () => {
             {/* Signup Form */}
             <form onSubmit={handleSignup} className="w-full flex flex-col items-center">
               {/* Username */}
-              <div className="flex flex-col text-gray-500 gap-2 mb-3 w-full sm:w-[90%]">
+              <div className=" text-white block mb-3 w-full sm:w-[90%]">
                 <label>{translations[language].username}</label>
                 <input
                   type="text"
                   placeholder={translations[language].username}
-                  className="border p-2 rounded-[10px] w-full"
+                  className="border mt-3 p-2 rounded-[10px] w-full  bg-white/20 text-white placeholder-gray-200"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   required
@@ -197,12 +198,12 @@ const Signup = () => {
               </div>
 
               {/* Email */}
-              <div className="flex flex-col text-gray-500 gap-2 mb-3 w-full sm:w-[90%]">
+              <div className=" text-white block mb-3 w-full sm:w-[90%]">
                 <label>{translations[language].email}</label>
                 <input
                   type="email"
                   placeholder={translations[language].email}
-                  className="border p-2 rounded-[10px] w-full"
+                 className="border mt-3 p-2 rounded-[10px] w-full  bg-white/20 text-white placeholder-gray-200"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -210,26 +211,26 @@ const Signup = () => {
               </div>
 
               {/* Password */}
-              <div className="flex flex-col text-gray-500 gap-2 mb-3 w-full sm:w-[90%]">
+             <div className=" text-white block mb-3 w-full sm:w-[90%]">
                 <label>{translations[language].password}</label>
                 <input
                   type="password"
                   placeholder={translations[language].password}
-                  className="border p-2 rounded-[10px] w-full"
+                  className="border mt-3 p-2 rounded-[10px] w-full  bg-white/20 text-white placeholder-gray-200"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
               </div>
 
-              <button className="border w-full sm:w-[90%] bg-blue-500 text-white p-2.5 mt-5 rounded-3xl font-semibold text-base sm:text-lg">
+              <button className="  bg-gradient-to-r from-indigo-500 to-pink-500 w-full sm:w-[90%] bg-blue-500 text-white p-2.5 mt-5 rounded-3xl font-semibold text-base sm:text-lg">
                 {translations[language].signup}
               </button>
             </form>
 
             {/* OR Divider */}
             <div className="w-full flex flex-col items-center">
-              <div className="flex justify-center uppercase text-gray-400 items-center gap-3 mt-5 w-[90%]">
+              <div className="flex justify-center uppercase text-white items-center gap-3 mt-5 w-[90%]">
                 <span className="border flex-1 h-0"></span>
                 <p className="text-sm sm:text-base">{translations[language].or}</p>
                 <span className="border flex-1 h-0"></span>
@@ -238,7 +239,7 @@ const Signup = () => {
               {/* Google Signup */}
               <button
                 onClick={handleGoogleSignup}
-                className="flex items-center gap-3 border-2 w-full sm:w-[90%] p-2.5 mt-5 rounded-3xl justify-center border-gray-400"
+                className="flex items-center gap-3 border-2 w-full sm:w-[90%] p-2.5 mt-5 rounded-3xl justify-center text-white"
               >
                 <FcGoogle className="text-lg sm:text-xl" />
                 <p className="text-sm sm:text-base">{translations[language].google}</p>
@@ -247,7 +248,8 @@ const Signup = () => {
           </div>
         </div>
       </section>
-    </>
+    </main>
+       </>
   );
 };
 
