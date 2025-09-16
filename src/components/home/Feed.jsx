@@ -13,6 +13,7 @@ import {
 } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import { FiMoreVertical, FiHeart, FiMessageCircle, FiShare2 } from "react-icons/fi";
+import { createNotification } from "../../utils/CreateNotification";
 
 const Feed = () => {
   const [posts, setPosts] = useState([]);
@@ -21,6 +22,7 @@ const Feed = () => {
   const [showCommentBox, setShowCommentBox] = useState({}); // toggle input
   const [showComments, setShowComments] = useState({}); // toggle comment list
 
+  // Fetch posts from Firebase
   useEffect(() => {
     const fetchPosts = async () => {
       const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
@@ -31,6 +33,7 @@ const Feed = () => {
     fetchPosts();
   }, []);
 
+  // Delete post
   const handleDelete = async (postId) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this post?");
     if (!confirmDelete) return;
@@ -43,6 +46,7 @@ const Feed = () => {
     }
   };
 
+  // Like post
   const handleLike = async (post) => {
     const userId = auth.currentUser?.uid;
     if (!userId) return;
@@ -51,6 +55,7 @@ const Feed = () => {
 
     try {
       if (post.likes?.includes(userId)) {
+        // Remove like
         await updateDoc(postRef, { likes: arrayRemove(userId) });
         setPosts(
           posts.map((p) =>
@@ -58,24 +63,37 @@ const Feed = () => {
           )
         );
       } else {
+        // Add like
         await updateDoc(postRef, { likes: arrayUnion(userId) });
         setPosts(
           posts.map((p) =>
             p.id === post.id ? { ...p, likes: [...(p.likes || []), userId] } : p
           )
         );
+
+        // Send notification
+        if (auth.currentUser.uid !== post.uid) {
+          await createNotification({
+            type: "like",
+            fromUid: userId,
+            toUid: post.uid,
+            postId: post.id,
+          });
+        }
       }
     } catch (err) {
       console.error("Error liking post:", err);
     }
   };
 
+  // Share post
   const handleShare = (post) => {
     const postUrl = `${window.location.origin}/feed#${post.id}`;
     navigator.clipboard.writeText(postUrl);
     alert("Post link copied to clipboard!");
   };
 
+  // Add comment
   const handleComment = async (postId) => {
     const user = auth.currentUser;
     if (!user || !commentText[postId]) return;
@@ -91,7 +109,22 @@ const Feed = () => {
     };
 
     try {
+      // Add comment to Firebase
       await updateDoc(postRef, { comments: arrayUnion(newComment) });
+
+      // Send notification to post owner
+      const postOwnerUid = posts.find((p) => p.id === postId)?.uid;
+      if (postOwnerUid && postOwnerUid !== user.uid) {
+        await createNotification({
+          type: "comment",
+          fromUid: user.uid,
+          toUid: postOwnerUid,
+          postId,
+          commentText: commentText[postId],
+        });
+      }
+
+      // Update state
       setPosts(
         posts.map((p) =>
           p.id === postId ? { ...p, comments: [...(p.comments || []), newComment] } : p

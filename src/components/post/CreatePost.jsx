@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef , useEffect } from "react";
 import axios from "axios";
 import { db, auth } from "../../config/Firebaseconfig";
 import { addDoc, collection, serverTimestamp, doc, getDoc } from "firebase/firestore";
@@ -9,7 +9,23 @@ const CreatePost = () => {
   const [text, setText] = useState("");
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [profilePic , setProfilePic] = useState("f")
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const user = auth.currentUser;
+      if (!user) return;
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      if (userDoc.exists()) {
+        setProfilePic(userDoc.data().profilePic || `https://i.pravatar.cc/40?u=${user.uid}`);
+      } else {
+        setProfilePic(`https://i.pravatar.cc/40?u=${user.uid}`);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   const handlePost = async () => {
     if (!text && !file) return alert("Write something or add a file");
@@ -70,12 +86,13 @@ const CreatePost = () => {
     }
   };
 
+  
   return (
     <div className=" rounded pt-5 px-3 mb-4 bg-white shadow-sm flex gap-3">
       {/* Profile picture */}
       <Link to='/profile'>
        <img
-        src={auth.currentUser?.photoURL || "https://i.pravatar.cc/40"}
+        src={profilePic}
         alt="profile"
         className="h-10 w-10 rounded-full "
       />

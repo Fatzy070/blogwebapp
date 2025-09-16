@@ -8,7 +8,7 @@ import Feed from "./components/home/Feed";
 import FollowersList from "./components/home/FollowersList";
 import Home from './components/home/Home';
 import Layout from './layout/Layout';
-
+import NotificationsPage from './utils/NotificationPage';
 const App = () => {
   return (
     <BrowserRouter>
@@ -26,7 +26,7 @@ const App = () => {
          <Route path="profile" element={<Profile />} />
          <Route path='home' element={<Home />} />
         <Route path=":uid/:type" element={<FollowersList />} />
-
+        <Route path='notification' element={<NotificationsPage />} />
         </Route>
        
       </Routes>

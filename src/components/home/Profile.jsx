@@ -128,7 +128,7 @@ const Profile = () => {
   const amIFollowing = user.followers?.includes(auth.currentUser?.uid);
 
   return (
-    <div className="">
+    <div className="md:w-[600px]">
       {/* Profile header */}
       <div className="pb-2 pt-3 px-4 block md:hidden">
         <Link to="/home">
