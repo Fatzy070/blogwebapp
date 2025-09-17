@@ -1,0 +1,20 @@
+/* theme.css */
+
+/* Light mode default */
+body {
+  background-color: #ffffff;
+  color: #111111;
+  transition: background 0.3s, color 0.3s;
+}
+
+
+/* Dark mode */
+body.dark {
+  background-color: #111111;
+  color: #f1f1f1;
+}
+
+.sidebar.dark {
+  background-color: #1e1e1e;
+  color: #f9f9f9;
+}

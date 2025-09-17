@@ -4,7 +4,7 @@ import SearchUsers from '../../utils/SearchUsers';
 import Feed from './Feed';
 const Home = () => {
     return (
-        <div className='border md:w-[600px]'>
+        <div className=' md:w-[600px]'>
             <div className=' md:hidden'>
                 <SearchUsers />
             </div>

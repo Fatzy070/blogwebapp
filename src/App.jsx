@@ -9,8 +9,10 @@ import FollowersList from "./components/home/FollowersList";
 import Home from './components/home/Home';
 import Layout from './layout/Layout';
 import NotificationsPage from './utils/NotificationPage';
+
 const App = () => {
   return (
+     
     <BrowserRouter>
       <Routes>
         {/* Redirect root to signup */}
@@ -25,12 +27,14 @@ const App = () => {
          <Route path="feed" element={<Feed />} />
          <Route path="profile" element={<Profile />} />
          <Route path='home' element={<Home />} />
+         <Route path="profile/:uid" element={<Profile />} />
         <Route path=":uid/:type" element={<FollowersList />} />
         <Route path='notification' element={<NotificationsPage />} />
         </Route>
        
       </Routes>
     </BrowserRouter>
+
   )
 };
 

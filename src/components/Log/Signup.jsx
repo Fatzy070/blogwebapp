@@ -12,28 +12,27 @@ import Loading from "../Loading";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
-  const [username, setUsername] = useState(""); // ✅ username state
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [language, setLanguage] = useState("en");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // translation dictionary
   const translations = {
     en: {
-      haveAccount: "already have an account?",
+      haveAccount: "Already have an account?",
       login: "Login",
       create: "Create an account",
       username: "Username",
       email: "Email",
       password: "Password",
-      signup: "Signup",
+      signup: "Sign up",
       or: "Or",
       google: "Continue with Google",
     },
     fr: {
-      haveAccount: "vous avez déjà un compte ?",
+      haveAccount: "Vous avez déjà un compte ?",
       login: "Connexion",
       create: "Créer un compte",
       username: "Nom d'utilisateur",
@@ -43,42 +42,8 @@ const Signup = () => {
       or: "Ou",
       google: "Continuer avec Google",
     },
-    es: {
-      haveAccount: "¿ya tienes una cuenta?",
-      login: "Iniciar sesión",
-      create: "Crear una cuenta",
-      username: "Nombre de usuario",
-      email: "Correo electrónico",
-      password: "Contraseña",
-      signup: "Registrarse",
-      or: "O",
-      google: "Continuar con Google",
-    },
-    de: {
-      haveAccount: "bereits ein Konto?",
-      login: "Anmelden",
-      create: "Konto erstellen",
-      username: "Benutzername",
-      email: "E-Mail",
-      password: "Passwort",
-      signup: "Registrieren",
-      or: "Oder",
-      google: "Weiter mit Google",
-    },
-    ar: {
-      haveAccount: "هل لديك حساب بالفعل؟",
-      login: "تسجيل الدخول",
-      create: "إنشاء حساب",
-      username: "اسم المستخدم",
-      email: "البريد الإلكتروني",
-      password: "كلمة المرور",
-      signup: "إنشاء حساب",
-      or: "أو",
-      google: "متابعة باستخدام Google",
-    },
   };
 
-  // Email/Password Signup
   const handleSignup = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -86,19 +51,15 @@ const Signup = () => {
       const userCred = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCred.user;
 
-      // save user to Firestore
       await setDoc(doc(db, "users", user.uid), {
         email: user.email,
-        username: username,
+        username,
         bio: "",
         profilePic: "",
         createdAt: serverTimestamp(),
       });
 
-      // save username locally
       localStorage.setItem("username", username);
-      alert("Signup successful!");
-      console.log("User signed up:", user);
       navigate("/login");
     } catch (err) {
       setError(err.message);
@@ -107,7 +68,6 @@ const Signup = () => {
     }
   };
 
-  // Google Signup
   const handleGoogleSignup = async () => {
     setLoading(true);
     const provider = new GoogleAuthProvider();
@@ -124,132 +84,117 @@ const Signup = () => {
           profilePic: user.photoURL || "",
           createdAt: serverTimestamp(),
         });
-
         localStorage.setItem("username", user.displayName || "");
       }
 
-      alert("Signup successful!");
-      console.log("Google signup success:", user);
-      navigate("/profile");
+      navigate("/home");
     } catch (err) {
-      console.error("Google signup error:", err.message);
       setError(err.message);
     } finally {
       setLoading(false);
     }
   };
-  
-  if (loading) {
-  return <Loading />;
-}
+
+  if (loading) return <Loading />;
+
   return (
-    <>
-    <main className="back  bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500">
-      {/* Header Row */}
-      <div className="flex text-white flex-col sm:flex-row items-center justify-between gap-2 w-full px-3 sm:px-6 py-3">
-        {/* Language selection */}
-        <div className="w-full sm:w-auto flex justify-start sm:justify-center">
+    <main className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 px-4">
+      <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
           <select
-            className="border rounded p-1.5  w-full sm:w-auto"
+            className="border rounded-md p-2 text-sm dark:bg-gray-700 dark:text-gray-200"
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
           >
-            <option value="en" className="text-gray-500">English</option>
-            <option value="fr" className="text-gray-500">Français</option>
-            <option value="es" className="text-gray-500">Español</option>
-            <option value="de" className="text-gray-500">Deutsch</option>
-            <option value="ar" className="text-gray-500">العربية</option>
+            <option value="en">English</option>
+            <option value="fr">Français</option>
           </select>
-        </div>
 
-        {/* Already have account */}
-        <div className="flex items-center capitalize gap-1.5 text-sm sm:text-base">
-          <p>{translations[language].haveAccount}</p>
-          <Link to="/login" className="text-blue-500 hover:underline font-medium">
-            {translations[language].login}
-          </Link>
-        </div>
-      </div>
-
-      {/* Signup Section */}
-      <section className="flex  justify-center items-center min-h-screen px-3 sm:px-6 md:px-10">
-        <div className=" bg-white/10 backdrop-blur-xl py-6 px-4 sm:px-6 md:px-8 w-full max-w-[350px] sm:max-w-[400px] md:max-w-[500px] rounded-2xl flex flex-col justify-center shadow-md">
-          <div className="w-full flex flex-col">
-            <h2 className="text-center text-white font-semibold font-sans acct text-[1.75rem] sm:text-[2rem] pb-3">
-              {translations[language].create}
-            </h2>
-            {error && (
-              <p className="text-red-500 pb-2 text-center text-sm sm:text-base">{error}</p>
-            )}
-
-            {/* Signup Form */}
-            <form onSubmit={handleSignup} className="w-full flex flex-col items-center">
-              {/* Username */}
-              <div className=" text-white block mb-3 w-full sm:w-[90%]">
-                <label>{translations[language].username}</label>
-                <input
-                  type="text"
-                  placeholder={translations[language].username}
-                  className="border mt-3 p-2 rounded-[10px] w-full  bg-white/20 text-white placeholder-gray-200"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
-                />
-              </div>
-
-              {/* Email */}
-              <div className=" text-white block mb-3 w-full sm:w-[90%]">
-                <label>{translations[language].email}</label>
-                <input
-                  type="email"
-                  placeholder={translations[language].email}
-                 className="border mt-3 p-2 rounded-[10px] w-full  bg-white/20 text-white placeholder-gray-200"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-
-              {/* Password */}
-             <div className=" text-white block mb-3 w-full sm:w-[90%]">
-                <label>{translations[language].password}</label>
-                <input
-                  type="password"
-                  placeholder={translations[language].password}
-                  className="border mt-3 p-2 rounded-[10px] w-full  bg-white/20 text-white placeholder-gray-200"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </div>
-
-              <button className="  bg-gradient-to-r from-indigo-500 to-pink-500 w-full sm:w-[90%] bg-blue-500 text-white p-2.5 mt-5 rounded-3xl font-semibold text-base sm:text-lg">
-                {translations[language].signup}
-              </button>
-            </form>
-
-            {/* OR Divider */}
-            <div className="w-full flex flex-col items-center">
-              <div className="flex justify-center uppercase text-white items-center gap-3 mt-5 w-[90%]">
-                <span className="border flex-1 h-0"></span>
-                <p className="text-sm sm:text-base">{translations[language].or}</p>
-                <span className="border flex-1 h-0"></span>
-              </div>
-
-              {/* Google Signup */}
-              <button
-                onClick={handleGoogleSignup}
-                className="flex items-center gap-3 border-2 w-full sm:w-[90%] p-2.5 mt-5 rounded-3xl justify-center text-white"
-              >
-                <FcGoogle className="text-lg sm:text-xl" />
-                <p className="text-sm sm:text-base">{translations[language].google}</p>
-              </button>
-            </div>
+          <div className="text-sm text-gray-600 dark:text-gray-300">
+            {translations[language].haveAccount}{" "}
+            <Link
+              to="/login"
+              className="text-blue-600 hover:underline font-medium"
+            >
+              {translations[language].login}
+            </Link>
           </div>
         </div>
-      </section>
+
+        {/* Title */}
+        <h2 className="text-center text-2xl font-bold text-gray-800 dark:text-white mb-4">
+          {translations[language].create}
+        </h2>
+
+        {error && (
+          <p className="text-red-500 text-center text-sm mb-3">{error}</p>
+        )}
+
+        {/* Form */}
+        <form onSubmit={handleSignup} className="space-y-4">
+          <div>
+            <label className="block text-gray-700 dark:text-gray-300 text-sm mb-1">
+              {translations[language].username}
+            </label>
+            <input
+              type="text"
+              className="w-full border rounded-lg px-3 py-2 bg-gray-50 dark:bg-gray-700 dark:text-white"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-700 dark:text-gray-300 text-sm mb-1">
+              {translations[language].email}
+            </label>
+            <input
+              type="email"
+              className="w-full border rounded-lg px-3 py-2 bg-gray-50 dark:bg-gray-700 dark:text-white"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-700 dark:text-gray-300 text-sm mb-1">
+              {translations[language].password}
+            </label>
+            <input
+              type="password"
+              className="w-full border rounded-lg px-3 py-2 bg-gray-50 dark:bg-gray-700 dark:text-white"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <button className="w-full bg-blue-600 text-white py-2.5 rounded-lg font-medium hover:bg-blue-700 transition">
+            {translations[language].signup}
+          </button>
+        </form>
+
+        {/* Divider */}
+        <div className="flex items-center my-5">
+          <span className="flex-1 h-px bg-gray-300 dark:bg-gray-600"></span>
+          <span className="px-3 text-sm text-gray-500 dark:text-gray-400">
+            {translations[language].or}
+          </span>
+          <span className="flex-1 h-px bg-gray-300 dark:bg-gray-600"></span>
+        </div>
+
+        {/* Google Signup */}
+        <button
+          onClick={handleGoogleSignup}
+          className="w-full flex items-center justify-center gap-2 border py-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
+        >
+          <FcGoogle size={20} /> {translations[language].google}
+        </button>
+      </div>
     </main>
-       </>
   );
 };
 

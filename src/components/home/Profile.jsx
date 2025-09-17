@@ -236,7 +236,7 @@ const Profile = () => {
           posts.map((post) => {
             const liked = auth.currentUser && post.likes?.includes(auth.currentUser.uid);
             return (
-              <div key={post.id} className="p-3 mb-3 shadow-sm bg-white rounded relative">
+              <div key={post.id} className="p-3 mb-3 shadow-sm rounded relative">
                 {/* Post text */}
                 {post.text && <p className="mt-2 text-gray-700">{post.text}</p>}
 

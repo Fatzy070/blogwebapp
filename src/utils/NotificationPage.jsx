@@ -41,11 +41,11 @@ const NotificationsPage = () => {
   }, [user]);
 
   return (
-    <div className="p-4 max-w-md mx-auto">
+    <div className="">
       <h2 className="text-xl font-bold mb-4">Notifications</h2>
       {notifications.length === 0 && <p>No notifications yet.</p>}
       {notifications.map(n => (
-        <div key={n.id} className={`flex items-start gap-3 p-3 border-b ${!n.read ? "bg-gray-100" : ""}`}>
+        <div key={n.id} className={`flex items-start gap-3 p-3 ${!n.read ? "" : ""}`}>
           <img
             src={n.fromUserData.profilePic || `https://i.pravatar.cc/40?u=${n.fromUid}`}
             alt="avatar"

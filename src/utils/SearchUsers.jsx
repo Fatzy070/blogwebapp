@@ -3,6 +3,7 @@ import { IoMdNotifications } from "react-icons/io";
 import { auth, db } from "../config/Firebaseconfig";
 import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
 import { Link } from "react-router-dom";
+import ThemeToggle from "../theme/ThemeToggle";
 
 const SearchUsers = () => {
   const [profilePic, setProfilePic] = useState("");
@@ -48,43 +49,55 @@ const SearchUsers = () => {
   }, [searchTerm]);
 
   return (
-    <div>
+    <div className="">
       {/* Header */}
-      <div className="flex items-center justify-between p-3">
-        <Link to="/notification">
+      <div className="sticky top-0  flex items-center justify-between p-3 shadow-sm z-10">
+        <Link to="/notification" className="text-gray-600 hover:text-blue-500">
           <IoMdNotifications size={27} />
         </Link>
-        <Link to="/profile">
+        <div>
+          <ThemeToggle />
+        </div>
+        <Link to={`/profile/${auth.currentUser?.uid}`}>
           <img
             src={profilePic}
             alt="profile"
-            className="h-[30px] w-[30px] rounded-full"
+            className="h-9 w-9 rounded-full border cursor-pointer"
           />
         </Link>
+        
       </div>
 
       {/* Search Input */}
-      <div className="flex justify-center w-full mb-2">
+      <div className="px-4 mt-3">
         <input
           type="text"
-          className="border bg-gray-200 rounded-[8px] py-1 px-2 w-full max-w-md"
-          placeholder="🔍 Search users"
+          className="w-full  shadow-sm rounded-full py-2 px-4 text-sm border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          placeholder="🔍 Search users..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
 
       {/* Search Results */}
-      <div className="max-w-md mx-auto">
+      <div className="max-w-md mx-auto mt-4 px-3">
+        {results.length === 0 && searchTerm && (
+          <p className="text-center text-gray-500 text-sm">No users found.</p>
+        )}
+
         {results.map(user => (
-          <div key={user.id} className="flex items-center gap-3 p-2">
+          <Link
+            to={`/profile/${user.id}`}
+            key={user.id}
+            className="flex items-center gap-3 p-3 bg-white rounded-xl shadow-sm mb-2 hover:bg-gray-100 transition"
+          >
             <img
               src={user.profilePic || `https://i.pravatar.cc/40?u=${user.id}`}
               alt={user.username}
-              className="h-8 w-8 rounded-full"
+              className="h-10 w-10 rounded-full object-cover border"
             />
-            <span>{user.username}</span>
-          </div>
+            <span className="font-medium text-gray-700">{user.username}</span>
+          </Link>
         ))}
       </div>
     </div>

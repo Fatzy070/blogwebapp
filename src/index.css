@@ -10,3 +10,9 @@
 .all{
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
+.clip {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 57%, 42% 58%, 45% 66%, 23% 59%, 0 59%);
+  filter: drop-shadow(0 4px 20px rgba(199, 27, 27, 0.6));
+  background-color: black;
+  height: 160px;
+}
