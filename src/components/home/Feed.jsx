@@ -244,7 +244,7 @@ const Feed = () => {
                       className="h-8 w-8 rounded-full"
                     />
                     <div className="bg-gray-100 p-2 rounded-lg max-w-[80%]">
-                      <p className="text-sm font-semibold">{c.username}</p>
+                      <p className="text-sm text-black font-semibold">{c.username}</p>
                       <p className="text-sm text-gray-700">{c.text}</p>
                     </div>
                   </div>

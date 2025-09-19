@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { db, auth } from "../config/Firebaseconfig";
 import { collection, query, where, orderBy, onSnapshot, doc, getDoc } from "firebase/firestore";
 import { Link } from "react-router-dom";
+import { IoIosArrowBack } from "react-icons/io";
+
 
 const NotificationsPage = () => {
   const [notifications, setNotifications] = useState([]);
@@ -42,7 +44,15 @@ const NotificationsPage = () => {
 
   return (
     <div className="">
-      <h2 className="text-xl font-bold mb-4">Notifications</h2>
+      <Link 
+        to='/home'
+        className="p-2 flex md:hidden"
+      >
+        <IoIosArrowBack size={22}/>
+
+      </Link>
+      <div className="px-4">
+        <h2 className="text-xl font-bold mb-4">Notifications</h2>
       {notifications.length === 0 && <p>No notifications yet.</p>}
       {notifications.map(n => (
         <div key={n.id} className={`flex items-start gap-3 p-3 ${!n.read ? "" : ""}`}>
@@ -58,6 +68,7 @@ const NotificationsPage = () => {
           </div>
         </div>
       ))}
+      </div>
     </div>
   );
 };

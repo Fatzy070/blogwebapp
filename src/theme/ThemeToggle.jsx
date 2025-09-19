@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "../theme.css";
+import { PiSunDimLight } from "react-icons/pi";
+import { IoMdMoon } from "react-icons/io";
+
 
 const ThemeToggle = () => {
   const [dark, setDark] = useState(false);
@@ -29,7 +32,7 @@ const ThemeToggle = () => {
       onClick={() => setDark(!dark)}
       className="px-4 py-2 rounded "
     >
-      {dark ? "🌙" : "☀️ "}
+      {dark ? <IoMdMoon size={24}  />: <PiSunDimLight size={24} />}
     </button>
   );
 };

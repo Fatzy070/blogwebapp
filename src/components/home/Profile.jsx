@@ -258,21 +258,23 @@ const Profile = () => {
                 )}
 
                 {/* Dropdown for delete */}
-                <div className="absolute top-3 right-3">
-                  <button onClick={() => setDropdownOpen(dropdownOpen === post.id ? null : post.id)}>
-                    <FiMoreVertical size={20} />
-                  </button>
-                  {dropdownOpen === post.id && (
-                    <div className="absolute right-0 mt-2 w-32 bg-white border rounded shadow-md z-10">
-                      <button
-                        onClick={() => handleDeletePost(post.id)}
-                        className="w-full text-left px-4 py-2 hover:bg-red-100 text-red-600"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  )}
-                </div>
+{auth.currentUser?.uid === post.uid && (
+  <div className="absolute top-3 right-3">
+    <button onClick={() => setDropdownOpen(dropdownOpen === post.id ? null : post.id)}>
+      <FiMoreVertical size={20} />
+    </button>
+    {dropdownOpen === post.id && (
+      <div className="absolute right-0 mt-2 w-32 bg-white border rounded shadow-md z-10">
+        <button
+          onClick={() => handleDeletePost(post.id)}
+          className="w-full text-left px-4 py-2 hover:bg-red-100 text-red-600"
+        >
+          Delete
+        </button>
+      </div>
+    )}
+  </div>
+)}
 
                 {/* Buttons */}
                 <div className="flex items-center mt-2 gap-6">

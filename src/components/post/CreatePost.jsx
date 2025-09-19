@@ -82,7 +82,7 @@ const CreatePost = () => {
           <img
             src={profilePic}
             alt="profile"
-            className="h-12 w-12 rounded-full object-cover "
+            className="h-11 w-12 rounded-full object-cover "
           />
         </Link>
 
